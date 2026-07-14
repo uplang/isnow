@@ -37,10 +37,11 @@ cases:
     isnow: "::+[9] >=6 <=18"
     at: "2026-07-14T18:00:09Z"
     holds: false
-  # bounded year range
+  # bounded year range (positional; no step — continuous stepping is pinned by
+  # the second-field cases below, which are verifiable to the second)
   - name: bounded-year-range-holds-inside
-    isnow: "/1+[3w] 12 >=2011 <2016"
-    at: "2013-01-24T12:00:00Z"
+    isnow: "12 >=2011 <2016"
+    at: "2013-06-15T12:00:00Z"
     holds: true
   - name: bounded-year-range-misses-at-end
     isnow: "12 >=2011 <2016"
