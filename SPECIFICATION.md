@@ -39,7 +39,7 @@ Every field is `!v-v±[N]`, any part optional:
 | `v-v` | inclusive range | `8-12` hours; `M-F`; `1-10`; `29-*` |
 | `-v` | count from the end | day `-1` = last of month; `12/-15` = last 15 days of December |
 | `-NwNd` | from-end, unit compound | `12/-2w1d` = last 2 weeks 1 day |
-| `v+[N]` | increment / nth from start | `Monday+[3]` = 3rd Monday; `:0+[15]` = every 15 min; `+[1,3]` = 1st and 3rd |
+| `v+[N]` | increment / nth from start | `Monday+[3]` = 3rd Monday; `:0+[15]` = every 15 min; `M+[1,3]` = 1st and 3rd Monday |
 | `v-[N]` | nth from the end | `Thursday-[1]` = last Thursday |
 | `+[Nw]` | week-granular increment | `/+[3w]` = every 3rd week of the year (anchor `0` elided) |
 
@@ -47,14 +47,15 @@ Range and increment may co-occur (`v-v±[N]`), and a set distributes the algebra
 
 ## 3. Symbolic names (semantic, case-insensitive, minimal-unique)
 
-- **Weekdays:** the minimal letters that uniquely identify each — `Su M Tu W Th F Sa` — plus common runs (`MWF`, `SS`, `TT`). A *default* (bare-group) weekday must be symbolic; a numeric weekday `1`–`7` (Sunday = 1) is allowed only in the explicit `d w t` position.
-- **Times:** `midnight` (any unique prefix down to `m`/`mn`) = `00:00:00`; `noon`/`midday` (down to `n`/`md`) = `12:00:00`.
+- **Weekdays:** the minimal letters that uniquely identify each — `Su M Tu W Th F Sa` — plus common runs (`MWF`, `SS`, `TT`). A *default* (bare-group) weekday must be symbolic; a numeric weekday `1`–`7` (Sunday = 1) is allowed only in the explicit three-group form (date group, weekday, time group).
+- **Times:** `midnight` = `00:00:00`; `noon`/`midday` = `12:00:00` — resolved by unique prefix of the three words plus the abbreviations `mn` (midnight) and `md` (midday). `m` is always Monday (weekday letters win); `mi`/`mid` are ambiguous and rejected.
 
 ## 4. Defaults and the shorthand ladder (semantic)
 
 Absent fields default so a short pattern is unambiguous by *separator position*:
 
-- Absent date fields ⇒ `*/*/* *`; absent time fields ⇒ `*:*:00`.
+- Absent date fields and weekday ⇒ wildcards (`*/*/* *`).
+- When no time field is given at all ⇒ `*:*:00`; when any time field is given, absent *finer* time fields ⇒ `00` and absent/empty *coarser* ones ⇒ `*` (so `6` ⇒ `06:00:00` but `:0,30` ⇒ `*:00,30:00`).
 - The bare pattern `*` ⇒ `*/*/* * *:*:00` ("every minute").
 
 Which slot a group's fields fill is determined by the group kind and the count of separators present; an implementation maps them onto Y/m/d, w, H/M/S. Illustrative collapses:
@@ -78,7 +79,7 @@ Start (`>`, `>=`) and end (`<`, `<=`) bounds each carry a full sub-spec:
 /1+[3w] 12 >=2011 <2016    every 3 weeks at noon, for 5 years from 2011
 ```
 
-Bounds **rebind increment context**: unbounded, `+[N]` resets within its parent field (seconds reset each minute); bounded, the increment counts continuously across the whole `[start, end)` (or `[start, now]`) span.
+Bounds **rebind increment context**: unbounded, `+[N]` resets within its parent field (seconds reset each minute); bounded, the increment counts continuously within each contiguous stretch of the bounded window (a daily time window is one stretch per day), restarting per stretch.
 
 ## 6. Grammar vs semantics (the split an implementation owns)
 

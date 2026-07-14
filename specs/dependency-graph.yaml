@@ -1,0 +1,31 @@
+# Build-order dependency graph for the isnow ecosystem (specs/ecosystem.md).
+# Nodes are bounded contexts; edges are "depends on".
+contexts:
+  language-core:
+    home: uplang/isnow
+    depends-on: []
+    provides: [terminology, conformance-corpus, generated-parsers]
+  go-engine:
+    home: uplang/isnow.go
+    depends-on: [language-core]
+    provides: [library-api-go]
+  go-cli:
+    home: uplang/isnow.go
+    depends-on: [go-engine]
+    provides: [isnow-binary]
+  go-server:
+    home: uplang/isnow.go
+    depends-on: [go-engine, go-cli]
+    provides: [http-api]
+  js-engine:
+    home: uplang/isnow.js
+    depends-on: [language-core]
+    provides: [library-api-js]
+  web-playground:
+    home: uplang/www.uplang.org
+    depends-on: [js-engine]
+    provides: [playground]
+  docs-governance:
+    home: uplang/docs.isnow.go, uplang/docs.isnow.js, uplang/_admin
+    depends-on: [go-cli, go-server, js-engine]
+    provides: [docs, manifest-entries]

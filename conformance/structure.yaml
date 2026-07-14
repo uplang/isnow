@@ -1,0 +1,98 @@
+# Groups, the shorthand ladder, and canonical forms (specs/contracts/semantics.md §Ladder).
+cases:
+  # SPECIFICATION.md §4 table, verbatim
+  - name: bare-hour-canonicalizes
+    isnow: "6"
+    canonical: "*/*/* * 06:00:00"
+  - name: weekday-noon-canonicalizes
+    isnow: "M noon"
+    canonical: "*/*/* Monday 12:00:00"
+  - name: date-bare-hour-canonicalizes
+    isnow: "/1 18"
+    canonical: "*/*/01 * 18:00:00"
+  - name: weekday-minute-set-canonicalizes
+    isnow: "Su :0,30"
+    canonical: "*/*/* Sunday *:00,30:00"
+  - name: month-tail-hour-zero-canonicalizes
+    isnow: "12/-1 0"
+    canonical: "*/12/-01 * 00:00:00"
+  - name: year-second-step-canonicalizes
+    isnow: "2000// ::0+[5]"
+    canonical: "2000/*/* * *:*:0+[5]"
+  # ladder defaults
+  - name: bare-star-canonicalizes
+    isnow: "*"
+    canonical: "*/*/* * *:*:00"
+  - name: date-only-matches-every-minute
+    isnow: "12/25"
+    canonical: "*/12/25 * *:*:00"
+  - name: weekday-only-matches-every-minute
+    isnow: "M"
+    canonical: "*/*/* Monday *:*:00"
+  - name: minute-set-leaves-hour-wild
+    isnow: ":0,30"
+    canonical: "*/*/* * *:00,30:00"
+  - name: two-slash-year-group
+    isnow: "2026//"
+    canonical: "2026/*/* * *:*:00"
+  - name: one-slash-is-month-day
+    isnow: "7/14"
+    canonical: "*/07/14 * *:*:00"
+  # bare-number routing
+  - name: bare-number-fills-empty-hour-slot
+    isnow: "2 :30"
+    canonical: "*/*/* * 02:30:00"
+  - name: numeric-weekday-in-three-group-form
+    isnow: "*/*/* 2 12:00"
+    canonical: "*/*/* Monday 12:00:00"
+  # group separators
+  - name: dot-separator-equivalent
+    isnow: "M.noon"
+    canonical: "*/*/* Monday 12:00:00"
+  - name: underscore-separator-equivalent
+    isnow: "M_noon"
+    canonical: "*/*/* Monday 12:00:00"
+  - name: surrounding-separators-tolerated
+    isnow: " 6 "
+    canonical: "*/*/* * 06:00:00"
+  # holds — the defining test
+  - name: wednesday-noon-holds
+    isnow: "M,W,F noon"
+    at: "2026-07-15T12:00:00-05:00"
+    holds: true
+  - name: wednesday-noon-second-one-misses
+    isnow: "M,W,F noon"
+    at: "2026-07-15T12:00:01-05:00"
+    holds: false
+  - name: date-only-holds-any-minute
+    isnow: "12/25"
+    at: "2026-12-25T23:59:00Z"
+    holds: true
+  - name: date-only-misses-second-thirty
+    isnow: "12/25"
+    at: "2026-12-25T23:59:30Z"
+    holds: false
+  - name: bare-hour-holds-at-second-zero
+    isnow: "6"
+    at: "2026-07-14T06:00:00Z"
+    holds: true
+  - name: bare-hour-misses-mid-minute
+    isnow: "6"
+    at: "2026-07-14T06:00:30Z"
+    holds: false
+  - name: bare-star-holds-every-minute
+    isnow: "*"
+    at: "2026-07-14T09:41:00Z"
+    holds: true
+  - name: bare-star-misses-mid-minute
+    isnow: "*"
+    at: "2026-07-14T09:41:30Z"
+    holds: false
+  - name: day-and-weekday-are-anded
+    isnow: "*/*/15 4 12:00"
+    at: "2026-07-15T12:00:00Z"
+    holds: true
+  - name: day-and-weekday-anded-misses-on-weekday
+    isnow: "*/*/15 5 12:00"
+    at: "2026-07-15T12:00:00Z"
+    holds: false

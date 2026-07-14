@@ -27,8 +27,9 @@ parser grammar IsnowParser;
 
 options { tokenVocab=IsnowLexer; }
 
-// A whole pattern: the main spec, then any start/end bounds.
-pattern  : spec bound* GSEP? EOF ;
+// A whole pattern: the main spec, then any start/end bounds. Leading and
+// trailing group separators are tolerated so callers need not trim input.
+pattern  : GSEP? spec bound* GSEP? EOF ;
 
 // A start (>, >=) or end (<, <=) bound carries a full sub-spec whose increments
 // are evaluated over the bounded span rather than within their parent field.
