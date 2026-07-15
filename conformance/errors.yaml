@@ -93,3 +93,9 @@ cases:
   - name: error-setpos-index-too-large
     isnow: "M-F+[99] noon"
     error: range
+  - name: error-descending-interval
+    isnow: "-[90mn]"
+    error: context
+  - name: error-zero-interval
+    isnow: "+[0mn]"
+    error: range

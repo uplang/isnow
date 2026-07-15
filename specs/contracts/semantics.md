@@ -42,6 +42,16 @@ Values beyond a parent cycle's actual length never match (day `31` simply doesn'
 
 Canonical weekday names Sunday…Saturday; resolution is case-insensitive unique-prefix, with the spec's single letters (`Su M Tu W Th F Sa`) and runs `MWF`, `SS` (weekend), `TT` (Tue+Thu) always valid. **`m` is always Monday.** Time symbols are `noon`/`midday` = 12:00:00 and `midnight` = 00:00:00, resolved by case-insensitive unique prefix of the three words plus the abbreviations `mn` (midnight) and `md` (midday); `mi` and `mid` are ambiguous → `symbol` errors, as are `T` and `S`. Time symbols are valid only as a bare group.
 
+## Intervals
+
+An **interval** is a true periodic recurrence — "every N units" — written as a bare group `+[N<unit>]` with an interval unit: `s` (second), `mn` (minute), `h` (hour), `d` (day). It is distinct from a field-local step: a step resets within one field's cycle, whereas an interval crosses field boundaries — `+[90mn]` spans hours, `+[25h]` spans days, `+[10d]` spans months.
+
+- **Anchor.** An interval is anchored at the **civil epoch, 1970-01-01T00:00:00 in the evaluation zone**, so it needs no explicit start ("every 90 minutes" is unambiguous). It fires at the start of each grid unit: `+[90mn]` at 00:00, 01:30, 03:00, …; `+[30s]` at every :00 and :30; `+[10d]` at midnight every tenth day from the epoch.
+- **Grid.** Let `T` be the count of whole units from the epoch to the instant (by civil arithmetic on the wall-clock fields). The interval holds iff `T mod N == 0` **and** the finer-than-unit fields are 0 (`+[Nmn]` requires second 0; `+[Nh]` minute and second 0; `+[Nd]` the whole time 00:00:00). A second-grained interval frees the second field (its time default becomes `*:*:*`); coarser ones keep the `:00` second default.
+- **Composition.** An interval is ANDed with the rest of the pattern: `M-F +[90mn] >=6 <=18` is every 90 minutes on weekdays within the 06:00–18:00 window. Multiple intervals may co-occur.
+- **Domain.** `N ≥ 1`; a descending interval (`-[N<unit>]`) is a `context` error; `+[0mn]` and an overflowing magnitude are `range` errors. The units `w`/`mo`/`y` are **not** interval units — weeks are the week-step (`/+[Nw]`), months and years the field sets/steps — so `+[2w]` stays a (day-slot) week step, not an interval.
+- **Rendering.** Intervals render after the `Y/m/d w H:M:S` form and before any bounds: `M-F +[90mn] >=6 <=18` ⇒ `*/*/* Monday-Friday *:*:00 +[90mn] >=*/*/* * 06:00:00 <=*/*/* * 18:00:00`.
+
 ## Bounds
 
 - A bound's sub-spec canonicalizes like any isnow **except** for bare-number routing: in a bound, a bare number of four digits → year, otherwise → hour (domain 0–23, else `range` — `>=2011` is a year, `>=6` a time, `>=25` a `range` error). It must constrain only with wildcards and **exact values** (sets, spans, tails, steps, exclusions, or a weekday field inside a bound are `context` errors), and compares **positionally**: only its non-wildcard fields, as a tuple in field order. `>=2011` ⇒ Y ≥ 2011; `<9/1` ⇒ (m, d) < (9, 1) in every year; `>=6` ⇒ (H, M, S) ≥ (6, 0, 0) daily. `>`/`<` are exclusive, `>=`/`<=` inclusive.
