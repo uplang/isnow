@@ -57,8 +57,11 @@ Every field is `!v-v±[N]`, any part optional:
 | `v+[N]` | increment / nth from start | `Monday+[3]` = 3rd Monday; `:0+[15]` = every 15 min; `M+[1,3]` = 1st and 3rd Monday |
 | `v-[N]` | nth from the end | `Thursday-[1]` = last Thursday |
 | `+[Nw]` | week-granular increment | `/+[3w]` = every 3rd week of the year (anchor `0` elided) |
+| `w-w±[N]` | weekday-span BYSETPOS | `M-F-[1]` = last business day of the month; `M-F+[1]` = first |
 
 Range and increment may co-occur (`v-v±[N]`), and a set distributes the algebra over each member (`1+[4],3+[6]`).
+
+**Intervals** are a separate construct — a bare group `+[N<unit>]` with a duration unit `s`/`mn`/`h`/`d` — meaning "every N units" from the civil epoch, crossing field boundaries: `+[90mn]` (every 90 minutes), `+[25h]`, `+[10d]`, `+[30s]`. Unlike a field-local step, an interval is not confined to one field's cycle. It ANDs with the rest of the pattern: `M-F +[90mn] >=6 <=18`. (Semantics: [semantics.md §Intervals](specs/contracts/semantics.md).)
 
 ## 3. Symbolic names (semantic, case-insensitive, minimal-unique)
 

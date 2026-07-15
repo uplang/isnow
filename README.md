@@ -9,6 +9,9 @@ An **isnow** (the language, and a pattern string in it) is a **matcher**, not a 
 M,W,F midnight          Mon/Wed/Fri at 00:00
 11/ Th-[1] noon         last Thursday of November at noon
 ::+[9] >=6 <=18         every 9 seconds from 06:00 to 18:00
+M-F-[1] noon            the last business day of the month at noon
++[90mn]                 every 90 minutes (a true interval, crossing hours)
+M-F +[30mn] >=9 <=17    every 30 minutes, 9-to-5, on weekdays
 ```
 
 This repository is the **grammar-first** home of the language: the ANTLR4 grammar is the source of truth, and every implementation is generated from it and verified against one shared corpus.
