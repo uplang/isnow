@@ -6,7 +6,7 @@ isnow describes date/times — from a single fixed instant to complex repetition
 
 > Is `*/*/1 * 12:*:00` **now**?
 
-A pattern matches an instant when *every* field's constraint holds for that instant. This is the whole semantics: an implementation exposes `is(pattern, instant) → bool` (and may derive "next occurrence" from it). This is strictly more expressive than cron, which only generates.
+A pattern matches an instant when _every_ field's constraint holds for that instant. This is the whole semantics: an implementation exposes `is(pattern, instant) → bool` (and may derive "next occurrence" from it). This is strictly more expressive than cron, which only generates.
 
 The grammar ([IsnowParser.g4](IsnowParser.g4) + [IsnowLexer.g4](IsnowLexer.g4)) recognizes structure and the field algebra; everything labeled **semantic** below is resolved by an implementation walking the parse tree.
 
@@ -14,10 +14,10 @@ The grammar ([IsnowParser.g4](IsnowParser.g4) + [IsnowLexer.g4](IsnowLexer.g4)) 
 
 Every artifact — this spec, the grammar comments, code identifiers, CLI help, API fields, and docs — uses these names and no synonyms.
 
-- **isnow** — the language, and (as a countable noun) a pattern string in it: *an isnow*, plural *isnows*.
+- **isnow** — the language, and (as a countable noun) a pattern string in it: _an isnow_, plural _isnows_.
 - **instant** — a specific date-time, resolved to the second in a named zone, that an isnow is tested against.
-- **holds** — the membership test, the language's defining operation: an isnow *holds at* an instant when every field constraint is satisfied. `is(isnow, instant) → bool`.
-- **occurrence** — an instant at which an isnow holds; *next/previous occurrence* are derived from `holds`.
+- **holds** — the membership test, the language's defining operation: an isnow _holds at_ an instant when every field constraint is satisfied. `is(isnow, instant) → bool`.
+- **occurrence** — an instant at which an isnow holds; _next/previous occurrence_ are derived from `holds`.
 - **canonical form** — the fully-qualified seven-field expansion `Y/m/d w H:M:S`; producing it is **canonicalizing**.
 - **shorthand ladder** — the positional default rules (§4) that let a short isnow stand for its canonical form.
 - **field** — one of the seven constraint slots (year, month, day, weekday, hour, minute, second); **group** — the date/bare/time runs that carry them; **group separator** — whitespace, `.`, or `_`.
@@ -29,15 +29,15 @@ Every artifact — this spec, the grammar comments, code identifiers, CLI help, 
 
 A fully-qualified pattern is seven fields in three groups plus optional bounds:
 
-```
+```text
 Y/m/d  w  H:M:S    [ >|>= spec ]  [ <|<= spec ]
 ```
 
-| Field | Group | Separator |
-| --- | --- | --- |
-| `Y` year, `m` month, `d` day | date group | `/` |
-| `w` weekday | bare group | — |
-| `H` hour (24), `M` minute, `S` second | time group | `:` |
+| Field                                 | Group      | Separator |
+| ------------------------------------- | ---------- | --------- |
+| `Y` year, `m` month, `d` day          | date group | `/`       |
+| `w` weekday                           | bare group | —         |
+| `H` hour (24), `M` minute, `S` second | time group | `:`       |
 
 Groups are separated by whitespace, `.`, or `_` (so a pattern is one shell-safe token): `Y/m/d.w.H:M:S` ≡ `Y/m/d_w_H:M:S` ≡ `Y/m/d w H:M:S`.
 
@@ -67,33 +67,33 @@ Range and increment may co-occur (`v-v±[N]`), and a set distributes the algebra
 
 ## 3. Symbolic names (semantic, case-insensitive, minimal-unique)
 
-- **Weekdays:** the minimal letters that uniquely identify each — `Su M Tu W Th F Sa` — plus common runs (`MWF`, `SS`, `TT`). A *default* (bare-group) weekday must be symbolic; a numeric weekday `1`–`7` (Sunday = 1) is allowed only in the explicit three-group form (date group, weekday, time group).
+- **Weekdays:** the minimal letters that uniquely identify each — `Su M Tu W Th F Sa` — plus common runs (`MWF`, `SS`, `TT`). A _default_ (bare-group) weekday must be symbolic; a numeric weekday `1`–`7` (Sunday = 1) is allowed only in the explicit three-group form (date group, weekday, time group).
 - **Times:** `midnight` = `00:00:00`; `noon`/`midday` = `12:00:00` — resolved by unique prefix of the three words plus the abbreviations `mn` (midnight) and `md` (midday). `m` is always Monday (weekday letters win); `mi`/`mid` are ambiguous and rejected.
 
 ## 4. Defaults and the shorthand ladder (semantic)
 
-Absent fields default so a short pattern is unambiguous by *separator position*:
+Absent fields default so a short pattern is unambiguous by _separator position_:
 
 - Absent date fields and weekday ⇒ wildcards (`*/*/* *`).
-- When no time field is given at all ⇒ `*:*:00`; when any time field is given, absent *finer* time fields ⇒ `00` and absent/empty *coarser* ones ⇒ `*` (so `6` ⇒ `06:00:00` but `:0,30` ⇒ `*:00,30:00`).
+- When no time field is given at all ⇒ `*:*:00`; when any time field is given, absent _finer_ time fields ⇒ `00` and absent/empty _coarser_ ones ⇒ `*` (so `6` ⇒ `06:00:00` but `:0,30` ⇒ `*:00,30:00`).
 - The bare pattern `*` ⇒ `*/*/* * *:*:00` ("every minute").
 
 Which slot a group's fields fill is determined by the group kind and the count of separators present; an implementation maps them onto Y/m/d, w, H/M/S. Illustrative collapses:
 
-| Shorthand | Canonical |
-| --- | --- |
-| `6` | `*/*/* * 06:00:00` |
-| `M noon` | `*/*/* Monday 12:00:00` |
-| `/1 18` | `*/*/01 * 18:00:00` |
-| `Su :0,30` | `*/*/* Sunday *:00,30:00` |
-| `12/-1 0` | `*/12/-01 * 00:00:00` |
-| `2000// ::0+[5]` | `2000/*/* * *:*:0+[5]` |
+| Shorthand        | Canonical                 |
+| ---------------- | ------------------------- |
+| `6`              | `*/*/* * 06:00:00`        |
+| `M noon`         | `*/*/* Monday 12:00:00`   |
+| `/1 18`          | `*/*/01 * 18:00:00`       |
+| `Su :0,30`       | `*/*/* Sunday *:00,30:00` |
+| `12/-1 0`        | `*/12/-01 * 00:00:00`     |
+| `2000// ::0+[5]` | `2000/*/* * *:*:0+[5]`    |
 
 ## 5. Bounds and increment context
 
 Start (`>`, `>=`) and end (`<`, `<=`) bounds each carry a full sub-spec:
 
-```
+```text
 ::+[9] >=6 <=18            every 9 seconds from 06:00 to 18:00
 12 <9/1                    every day at noon until September 1
 /1+[3w] 12 >=2011 <2016    every 3 weeks at noon, for 5 years from 2011

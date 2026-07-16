@@ -6,10 +6,10 @@ The single vocabulary for isnow. Every artifact — spec, grammar comments, code
 
 | Term | Definition |
 | --- | --- |
-| **isnow** | The language (formally *DTimpalr — Date/Time Pattern Language for Repetition*), and, as a countable noun, a pattern string in it: *an isnow*, plural *isnows*. "Write an isnow that matches the last Thursday of November." |
+| **isnow** | The language (formally _DTimpalr — Date/Time Pattern Language for Repetition_), and, as a countable noun, a pattern string in it: _an isnow_, plural _isnows_. "Write an isnow that matches the last Thursday of November." |
 | **instant** | A specific date-time, resolved to the second in a named time zone, that an isnow is tested against. |
-| **holds** | The membership test, the language's defining operation: an isnow *holds at* an instant when every field constraint is satisfied. `is(isnow, instant) → bool`. |
-| **occurrence** | An instant at which an isnow holds. *Next/previous occurrence* are derived operations built on `is`. |
+| **holds** | The membership test, the language's defining operation: an isnow _holds at_ an instant when every field constraint is satisfied. `is(isnow, instant) → bool`. |
+| **occurrence** | An instant at which an isnow holds. _Next/previous occurrence_ are derived operations built on `is`. |
 | **canonical form** | The fully-qualified seven-field expansion `Y/m/d w H:M:S` of any isnow; producing it is **canonicalizing**. (`6` ⇒ `*/*/* * 06:00:00`.) |
 | **shorthand ladder** | The positional default rules (SPECIFICATION.md §4) that let a short isnow stand for its canonical form. |
 

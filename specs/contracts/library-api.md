@@ -25,13 +25,13 @@ Errors are `errs.Const` sentinels matching the corpus error codes: `ErrSyntax`, 
 ## JS (`@uplang/isnow`, ESM)
 
 ```js
-parse(src)               // → Pattern (throws IsnowError with .code ∈ {syntax, symbol, range, context})
-pattern.holds(at)        // at: Date or ISO string; boolean
-pattern.next(from)       // → Date | null
-pattern.prev(from)       // → Date | null
-pattern.canonical        // string property
-pattern.explain()        // string
-is(src, at)              // one-shot convenience
+parse(src); // → Pattern (throws IsnowError with .code ∈ {syntax, symbol, range, context})
+pattern.holds(at); // at: Date or ISO string; boolean
+pattern.next(from); // → Date | null
+pattern.prev(from); // → Date | null
+pattern.canonical; // string property
+pattern.explain(); // string
+is(src, at); // one-shot convenience
 ```
 
 JS evaluates in a fixed zone chosen at parse time via `parse(src, {timeZone})` (IANA name, default the host zone), using `Intl`-derived field extraction — `Date` carries no zone.
