@@ -2,7 +2,7 @@
 
 ## Goal
 
-Make `uplang/isnow` the complete language home: terminology, conformance corpus, and generation that feeds the implementation repos.
+Make `tsvsheet/isnow` the complete language home: terminology, conformance corpus, and generation that feeds the implementation repos.
 
 ## Requirements
 

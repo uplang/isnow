@@ -2,7 +2,7 @@
 
 The public surface each implementation exposes, named per the terminology contract. Signatures are idiomatic per language; semantics are identical and pinned by the conformance corpus.
 
-## Go (`github.com/uplang/isnow.go`, package `isnow`)
+## Go (`github.com/tsvsheet/isnow.go`, package `isnow`)
 
 ```go
 // Parse recognizes src and resolves symbols + the shorthand ladder.
@@ -22,7 +22,7 @@ func Is(src string, at time.Time) (bool, error)
 
 Errors are `errs.Const` sentinels matching the corpus error codes: `ErrSyntax`, `ErrSymbol`, `ErrRange`, `ErrContext`. The evaluation zone is `at.Location()` — the caller owns zone selection; the library never reads the environment or the wall clock.
 
-## JS (`@uplang/isnow`, ESM)
+## JS (`@tsvsheet/isnow`, ESM)
 
 ```js
 parse(src); // → Pattern (throws IsnowError with .code ∈ {syntax, symbol, range, context})

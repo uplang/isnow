@@ -2,7 +2,7 @@
 
 ## Goal
 
-The root package `isnow` of `uplang/isnow.go`: parse → typed AST → canonicalize → match → derive, implementing the [semantics contract](../contracts/semantics.md) behind the [library API](../contracts/library-api.md).
+The root package `isnow` of `tsvsheet/isnow.go`: parse → typed AST → canonicalize → match → derive, implementing the [semantics contract](../contracts/semantics.md) behind the [library API](../contracts/library-api.md).
 
 ## Requirements
 

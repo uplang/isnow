@@ -2,7 +2,7 @@
 
 ## Goal
 
-The `isnow` binary (`cmd/isnow` in `uplang/isnow.go`), per the [CLI contract](../contracts/cli.md) and template.cli standards.
+The `isnow` binary (`cmd/isnow` in `tsvsheet/isnow.go`), per the [CLI contract](../contracts/cli.md) and template.cli standards.
 
 ## Requirements
 

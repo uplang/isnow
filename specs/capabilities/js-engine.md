@@ -2,7 +2,7 @@
 
 ## Goal
 
-`@uplang/isnow` in `uplang/isnow.js`: the same semantics as go-engine for the web, per the [library API contract](../contracts/library-api.md), on the up.js repo model.
+`@tsvsheet/isnow` in `tsvsheet/isnow.js`: the same semantics as go-engine for the web, per the [library API contract](../contracts/library-api.md), on the up.js repo model.
 
 ## Requirements
 

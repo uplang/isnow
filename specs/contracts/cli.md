@@ -1,6 +1,6 @@
 # CLI contract (`isnow`)
 
-One binary, `isnow`, built from `uplang/isnow.go` `cmd/isnow` per template.cli standards (urfave/cli/v3, env prefix `ISNOW_`, `--log-level`/`--log-format` global flags, shell completion enabled). The binary is the question: the default command is the membership test.
+One binary, `isnow`, built from `tsvsheet/isnow.go` `cmd/isnow` per template.cli standards (urfave/cli/v3, env prefix `ISNOW_`, `--log-level`/`--log-format` global flags, shell completion enabled). The binary is the question: the default command is the membership test.
 
 ## Exit codes (uniform)
 

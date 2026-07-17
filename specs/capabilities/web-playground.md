@@ -2,7 +2,7 @@
 
 ## Goal
 
-An interactive isnow playground at `uplang.org/isnow/` (in `uplang/www.uplang.org`), powered by `@uplang/isnow`.
+An interactive isnow playground at `uplang.org/isnow/` (in `uplang/www.uplang.org`), powered by `@tsvsheet/isnow`.
 
 ## Requirements
 
